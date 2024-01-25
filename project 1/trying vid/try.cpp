@@ -19,9 +19,16 @@ int main(int argc, char* argv[]) {
     cv::namedWindow("Video", 1); // identifies a window
     cv::Mat frame;
     char lastKey = 'c'; // Default to color display
-
+    cv::Mat frame, sobelXOutput, sobelYOutput;
     for (;;) {
         *capdev >> frame; // get a new frame from the camera, treat as a stream
+
+        /*sobelX3x3(frame, sobelXOutput);
+        sobelY3x3(frame, sobelYOutput);
+
+        cv::convertScaleAbs(sobelXOutput, sobelXOutput);
+        cv::convertScaleAbs(sobelYOutput, sobelYOutput);*/
+
         if (frame.empty()) {
             printf("frame is empty\n");
             break;
@@ -35,7 +42,21 @@ int main(int argc, char* argv[]) {
             Customgreyscale (frame, frame);
         }
         else if (lastKey == 'i') {
+          
             applySepiaTone(frame, frame);
+            
+        }
+        else if (lastKey == 'x') {
+            
+            sobelX3x3(frame, sobelXOutput);
+            cv::convertScaleAbs(sobelXOutput, sobelXOutput);
+            cv::imshow("Sobel X", sobelXOutput);
+            
+        }
+        else if (lastKey == 'y') {
+            sobelY3x3(frame, sobelYOutput);
+            cv::convertScaleAbs(sobelYOutput, sobelYOutput);
+            cv::imshow("Sobel Y", sobelYOutput);
         }
         cv::imshow("Video", frame);
 
@@ -54,6 +75,14 @@ int main(int argc, char* argv[]) {
             lastKey = key;
         }
         else if (key == 'i' || key == 'c') {
+            // Update lastKey based on user input
+            lastKey = key;
+        }
+        else if (key == 'x' || key == 'c') {
+            // Update lastKey based on user input
+            lastKey = key;
+        }
+        else if (key == 'y' || key == 'c') {
             // Update lastKey based on user input
             lastKey = key;
         }
