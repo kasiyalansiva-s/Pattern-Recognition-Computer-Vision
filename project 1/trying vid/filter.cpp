@@ -36,9 +36,9 @@ static void applySepiaTone(cv::Mat& src, cv::Mat& dst) {
             int newBlue = cv::saturate_cast<uchar>(0.272 * red + 0.534 * green + 0.131 * blue);
 
             // Update the pixel with modified color values
-            pixel[0] = newRed;    // Red
+            pixel[2] = newRed;    // Red
             pixel[1] = newGreen;  // Green
-            pixel[2] = newBlue;   // Blue
+            pixel[0] = newBlue;   // Blue
             dst.at<cv::Vec3b>(i, j) = pixel;
         }
         
@@ -46,4 +46,37 @@ static void applySepiaTone(cv::Mat& src, cv::Mat& dst) {
    
     
 
+}
+static int sobelX3x3(cv::Mat& src, cv::Mat& dst) {
+    dst.create(src.size(), CV_16SC3);
+
+    for (int y = 1; y < src.rows - 1; ++y) {
+        for (int x = 1; x < src.cols - 1; ++x) {
+            for (int c = 0; c < 3; ++c) {
+                int gx = src.at<cv::Vec3b>(y - 1, x + 1)[c] - src.at<cv::Vec3b>(y - 1, x - 1)[c]
+                    + 2 * (src.at<cv::Vec3b>(y, x + 1)[c] - src.at<cv::Vec3b>(y, x - 1)[c])
+                    + src.at<cv::Vec3b>(y + 1, x + 1)[c] - src.at<cv::Vec3b>(y + 1, x - 1)[c];
+                dst.at<cv::Vec3s>(y, x)[c] = static_cast<short>(gx);
+            }
+        }
+    }
+
+    return 0;
+}
+
+static int sobelY3x3(cv::Mat& src, cv::Mat& dst) {
+    dst.create(src.size(), CV_16SC3);
+
+    for (int y = 1; y < src.rows - 1; ++y) {
+        for (int x = 1; x < src.cols - 1; ++x) {
+            for (int c = 0; c < 3; ++c) {
+                int gy = src.at<cv::Vec3b>(y + 1, x - 1)[c] - src.at<cv::Vec3b>(y - 1, x - 1)[c]
+                    + 2 * (src.at<cv::Vec3b>(y + 1, x)[c] - src.at<cv::Vec3b>(y - 1, x)[c])
+                    + src.at<cv::Vec3b>(y + 1, x + 1)[c] - src.at<cv::Vec3b>(y - 1, x + 1)[c];
+                dst.at<cv::Vec3s>(y, x)[c] = static_cast<short>(gy);
+            }
+        }
+    }
+
+    return 0;
 }
