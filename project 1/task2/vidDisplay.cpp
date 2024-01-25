@@ -41,9 +41,10 @@ int main(int argc, char *argv[]) {
 
 
     
-	while (true) {
+	for (;;) {
 		cv::Mat frame;
-		*capdev >> frame;        // this gets a new frame from the webcam and treats it as a stream
+		*capdev >> frame;    
+		// this gets a new frame from the webcam and treats it as a stream
         
 		/*cv::Mat grayframe;
 		grayframe = capdev->read();*/
@@ -62,9 +63,22 @@ int main(int argc, char *argv[]) {
 		
 		if (userInput == 'h') {
 			cv::Mat greyscaleFrame;
-			greyscale(frame, greyscaleFrame);      // Display or use greyscaleFrame as needed
-			cv::imshow("Greyscaled Frame", greyscaleFrame);
+			
 
+			for (;;) {
+				*capdev >> frame;
+				greyscale(frame, greyscaleFrame);
+
+				//cv::Mat greyscaleFrame;
+				//greyscale(frame, greyscaleFrame);      // Display or use greyscaleFrame as needed
+				cv::imshow("Greyscaled Frame", greyscaleFrame);
+				char quit = cv::waitKey(10);
+				if(quit == 'q') {
+					cv::destroyAllWindows();
+					break;
+				}
+			}
+			
 		}
 
 	 //   if (key == 's') {
@@ -73,18 +87,21 @@ int main(int argc, char *argv[]) {
 		//	std::cout << "Frame saved as captured_frame.jpg" << std::endl;           // Displays the image is captured and saved successfully to the files
 		//}
 		if (userInput == 'g') {
-			//converts the webcam feed into grayscale
-			//cv::cvtColor(frame, frame, cv::COLOR_RGB2GRAY);
-			//cv::imshow("Grayscaled Video", frame);
-			////cv::imshow(frame);
-			//std::cout << " Videop is converted into grayscale" << std::endl;
-
-			cv::Mat grayscaleFrame;
-			cv::cvtColor(frame, grayscaleFrame, cv::COLOR_BGR2GRAY);
+			cv::Mat newgrayscale;
+			for (;;) {
+				*capdev >> frame;
+				cv::cvtColor(frame, newgrayscale, cv::COLOR_BGR2GRAY);
 
 
-			// DISPLAY GRAYSCALE FRAME
-			cv::imshow("Grayscale Webcam", grayscaleFrame);
+				// DISPLAY GRAYSCALE FRAME
+				cv::imshow("Grayscale Webcam", newgrayscale);
+				char quit = cv::waitKey(10);
+				if (quit == 'q') {
+					cv::destroyAllWindows();
+					break;
+				}
+			}
+			
 
 			// Write the grayscale frame to video file
 			//grayscaleWriter.write(grayscaleFrame);
