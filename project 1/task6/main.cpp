@@ -19,7 +19,8 @@ double getTime() {
 int main() {
     // Replace "your_image.jpg" with the path to your input image
     cv::Mat src = cv::imread("cathedral.jpeg");
-    printf("size of src", src.size);
+    std::cout << "Width : " << src.cols << std::endl;
+    std::cout << "Height: " << src.rows << std::endl;
     cv::Mat dst;
     if (src.empty()) {
         std::cerr << "Error loading image." << std::endl;
@@ -39,6 +40,8 @@ int main() {
     // print the results
     printf("Time per image (1): %.4lf seconds\n", difference1);
     // Save the result
+    std::cout << "Width : " << dst.cols << std::endl;
+    std::cout << "Height: " << dst.rows << std::endl;
     cv::imwrite("2D_blur_result.jpg", dst);
     cv::imshow("2D_blur_result.jpg", dst);
     
@@ -57,7 +60,8 @@ int main() {
     //print the results
     printf("Time per image (1): %.4lf seconds\n", difference2);
     //Save the result
-    
+    std::cout << "Width : " << dst.cols << std::endl;
+    std::cout << "Height: " << dst.rows << std::endl;
     cv::imwrite("separable_blur_result.jpg", dst);
     cv::imshow("separable_blur_result.jpg", dst);
     cv::waitKey(0);
