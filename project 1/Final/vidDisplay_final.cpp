@@ -71,7 +71,10 @@ int main(int argc, char* argv[]) {
             // Apply brightness and contrast adjustment
             brightness_contrast(frame, frame);
         }
-
+        if (lastKey == 'f') {
+            // Apply brightness and contrast adjustment
+            showFaces(frame, frame);
+        }
         // Display the processed frame
         cv::imshow("Video", frame);
 
