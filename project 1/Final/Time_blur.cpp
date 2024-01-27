@@ -1,3 +1,9 @@
+/*
+  Saikiran Juttu & Suriya Kasiyalan Siva
+  Spring 2024
+  01/27/2024
+  CS 5330 Computer Vision
+*/
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include "blur5x5_1.cpp"
