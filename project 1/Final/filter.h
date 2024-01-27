@@ -12,6 +12,9 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/videoio.hpp>
+#define FACE_CASCADE_FILE "./haarcascade_frontalface_alt2.xml"
+
+
 
 // Function to convert an image to greyscale using a custom method.
 static int Customgreyscale(cv::Mat& src, cv::Mat& dst);
@@ -26,7 +29,10 @@ static int blur5x5_2(cv::Mat& src, cv::Mat& dst);
 static int blurQuantize(cv::Mat& src, cv::Mat& dst);
 
 // Function to highlight faces in an image.
-static int showFaces(cv::Mat& src, cv::Mat& dst);
+// Prototypes for face detection
+int detectFaces(cv::Mat &grey, std::vector<cv::Rect> &faces);
+int drawBoxes(cv::Mat &frame, std::vector<cv::Rect> &faces, int minWidth = 50, float scale = 1.0);
+int applyFaceDetection(cv::Mat& frame);
 
 // Function to adjust brightness and contrast of an image.
 static int Brightness_contrast(cv::Mat& frame, cv::Mat& outputFrame);
