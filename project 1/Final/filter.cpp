@@ -326,3 +326,40 @@ static void strongColor(cv::Mat& frame, int hueValue, int hueRange) {
     cv::bitwise_and(grayPart, grayPart, grayPartMasked, maskInv);
     cv::add(coloredPart, grayPartMasked, frame);
 }
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////// EXTENSION ///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Vignette filter
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// Function to apply a vignette effect to an input image.
+// Parameters:
+//   - src: Input image (BGR)
+//   - vignetteStrength: Strength of the vignette effect, controlling the fading intensity
+static void applyVignette(cv::Mat& src, double vignetteStrength) {
+    // Get the width and height of the input image
+    int width = src.cols;
+    int height = src.rows;
+
+    // Loop through each pixel in the image
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            // Access the RGB values of the current pixel
+            cv::Vec3b& pixel = src.at<cv::Vec3b>(y, x);
+            
+            // Calculate the vignetting effect with faded curves based on pixel position
+            double vignette = pow((1.0 - sqrt(pow((x - width / 2.0) / (width / 2.0), 4) + pow((y - height / 2.0) / (height / 2.0), 4))), vignetteStrength);
+          
+            // Apply the vignetting effect to each color channel individually
+            pixel[2] *= vignette; // Red channel
+            pixel[1] *= vignette; // Green channel
+            pixel[0] *= vignette; // Blue channel
+        }
+    }
+}
