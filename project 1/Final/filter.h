@@ -41,7 +41,7 @@ static int sobelX3x3(cv::Mat& src, cv::Mat& dst);
 static int sobelY3x3(cv::Mat& src, cv::Mat& dst);
 
 // Function to apply a Sobel Y 3x3 filter to an image.
-static void strongColor();
+static void strongColor(cv::Mat& frame, int hueValue, int hueRange);
 
 #endif // FILTER_H
 
