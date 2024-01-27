@@ -1,7 +1,7 @@
 #include <opencv2/opencv.hpp>
-//#include "filter_final.h"
-#include "filter_final.cpp"
-//#include "faceDetect.h"
+#include "filter.h"
+#include "filter.cpp"
+#include "faceDetect.h"
 
 int main(int argc, char* argv[]) {
     cv::VideoCapture* capdev;
