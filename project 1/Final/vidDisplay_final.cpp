@@ -10,93 +10,85 @@
 #include "faceDetect.h"
 
 int main(int argc, char* argv[]) {
+    // Initialize Video Capture
     cv::VideoCapture* capdev;
 
-    // open the video device
+    // Open the video device (camera)
     capdev = new cv::VideoCapture(0);
     if (!capdev->isOpened()) {
         printf("Unable to open video device\n");
         return (-1);
     }
 
-    // get some properties of the image
+    // Get video frame properties
     cv::Size refS((int)capdev->get(cv::CAP_PROP_FRAME_WIDTH),
-        (int)capdev->get(cv::CAP_PROP_FRAME_HEIGHT));
+                  (int)capdev->get(cv::CAP_PROP_FRAME_HEIGHT));
     printf("Expected size: %d %d\n", refS.width, refS.height);
 
-    cv::namedWindow("Video", 1); // identifies a window
+    // Create a named window for video display
+    cv::namedWindow("Video", 1);
+
+    // Mat object to store each video frame
     cv::Mat frame;
     char lastKey = 'c'; // Default to color display
 
+    // Main processing loop
     for (;;) {
-        *capdev >> frame; // get a new frame from the camera, treat as a stream
+        *capdev >> frame; // Capture a new frame from the camera
+
+        // Check if the frame is empty
         if (frame.empty()) {
             printf("frame is empty\n");
             break;
         }
 
+        // Apply different filters based on user input
         if (lastKey == 'g') {
             // Convert the frame to grayscale
             cv::cvtColor(frame, frame, cv::COLOR_BGR2GRAY);
         }
         if (lastKey == 's') {
-            cv::imwrite("image saved2.jpg", frame);
+            // Save the current frame as an image
+            cv::imwrite("image_saved.jpg", frame);
         }
         if (lastKey == 'h') {
+            // Apply custom grayscale filter
             Customgreyscale(frame, frame);
         }
         if (lastKey == 't') {
+            // Apply sepia tone filter
             applySepiaTone(frame, frame);
         }
         if (lastKey == 'i') {
+            // Apply blur and quantize filter
             blurQuantize(frame, frame);
         }
         if (lastKey == 'b') {
+            // Apply a 5x5 blur filter
             blur5x5_2(frame, frame);
         }
         if (lastKey == 'a') {
+            // Apply brightness and contrast adjustment
             brightness_contrast(frame, frame);
         }
-        
+
+        // Display the processed frame
         cv::imshow("Video", frame);
 
-        // see if there is a waiting keystroke
+        // Check for a waiting keystroke
         char key = cv::waitKey(10);
 
+        // User input handling
         if (key == 'q') {
+            // Exit the program if 'q' is pressed
             break;
-        }
-        else if (key == 'g' || key == 'c') {
+        } else if (key == 'g' || key == 'c' || key == 'h' || key == 't' || key == 'b' || key == 'i' || key == 's' || key == 'a') {
             // Update lastKey based on user input
             lastKey = key;
         }
-        else if (key == 'h' || key == 'c') {
-            // Update lastKey based on user input
-            lastKey = key;
-        }
-        else if (key == 't' || key == 'c') {
-            // Update lastKey based on user input
-            lastKey = key;
-        }
-        else if (key == 'b' || key == 'c') {
-            // Update lastKey based on user input
-            lastKey = key;
-        }
-        else if (key == 'i' || key == 'c') {
-            // Update lastKey based on user input
-            lastKey = key;
-        }
-        else if (key == 's' || key == 'c') {
-            // Update lastKey based on user input
-            lastKey = key;
-        }
-
-        //else if (key == 'a' || key == 'c') {
-        //    // Update lastKey based on user input
-        //    lastKey = key;
-        //}
     }
 
+    // Release resources
     delete capdev;
     return (0);
 }
