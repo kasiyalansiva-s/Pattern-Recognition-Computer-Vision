@@ -1,6 +1,7 @@
 /*
-  Bruce A. Maxwell
+  Saikiran Juttu & Suriya Kasiyalan Siva
   Spring 2024
+  01/27/2024
   CS 5330 Computer Vision
 
   Functions for finding faces and drawing boxes around them
