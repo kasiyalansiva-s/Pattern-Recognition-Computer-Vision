@@ -292,3 +292,37 @@ static int magnitude(cv::Mat& sx, cv::Mat& sy, cv::Mat& dst) {
 
     return 0;
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// STRONG COLOR AND REST GRAY SCALE
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Function to enhance strong color in an image based on hue value and range.
+// Parameters:
+//   - frame: Input BGR image
+//   - hueValue: Hue value around which to identify strong color
+//   - hueRange: Range of acceptable hue values for strong color identification
+static void strongColor(cv::Mat& frame, int hueValue, int hueRange) {
+    // Convert the input frame from BGR to HSV color space
+    cv::Mat hsvFrame;
+    cv::cvtColor(frame, hsvFrame, cv::COLOR_BGR2HSV);
+
+    // Create a binary mask to isolate pixels with strong color based on hue
+    cv::Mat mask;
+    cv::inRange(hsvFrame, cv::Scalar(hueValue - hueRange, 100, 100), cv::Scalar(hueValue + hueRange, 255, 255), mask);
+    
+    // Isolate the colored part of the original frame using the mask
+    cv::Mat coloredPart;
+    cv::bitwise_and(frame, frame, coloredPart, mask);
+
+    // Convert the non-colored part to grayscale
+    cv::Mat grayPart;
+    cv::cvtColor(frame, grayPart, cv::COLOR_BGR2GRAY);
+    cv::cvtColor(grayPart, grayPart, cv::COLOR_GRAY2BGR);
+
+    // Combine the colored and grayscale parts to get the enhanced image
+    cv::Mat maskInv = ~mask; // Invert the mask
+    cv::Mat grayPartMasked;
+    cv::bitwise_and(grayPart, grayPart, grayPartMasked, maskInv);
+    cv::add(coloredPart, grayPartMasked, frame);
+}
