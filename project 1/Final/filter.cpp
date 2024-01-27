@@ -1,3 +1,9 @@
+/*
+  Saikiran Juttu & Suriya Kasiyalan Siva
+  Spring 2024
+  01/27/2024
+  CS 5330 Computer Vision
+*/
 #include <cstdio>                    // this is to call all the C++ input output libraries
 #include <iostream>
 #include <opencv2/opencv.hpp> // This header covers all the opencv functions 
