@@ -147,7 +147,7 @@ int main(int argc, char* argv[]) {
         if (key == 'q') {
             // Exit the program if 'q' is pressed
             break;
-        } else if (key == 'g' || key == 'c' || key == 'h' || key == 't' || key == 'b' || key == 'i' || key == 's' || key == 'a'|| key == 'x' || key == 'y' || key == 'm') {
+        } else if (key == 'g' || key == 'c' || key == 'h' || key == 't' || key == 'b' || key == 'i' || key == 's' || key == 'a'|| key == 'x' || key == 'y' || key == 'm'|| key == 'w'|| key == 'v') {
             // Update lastKey based on user input
             lastKey = key;
         }
