@@ -124,9 +124,19 @@ int main(int argc, char* argv[]) {
         }
         else if (lastKey == 'w') {
         // Call the isolateColor function with the desired hue value and range
-        filter::strongColor(frame, 60, 10); // Example for green color
-        cv::imshow("Video", frame);
+                 filter::strongColor(frame, 60, 10); // Example for green color
+                 cv::imshow("Video", frame);
         }
+        else if (lastKey == 'v'){
+                 // Adjust vignette strength (reduce to half)
+                 double vignetteStrength = 0.15;
+
+                 // Apply the vignette effect
+                 applyVignette(frame, vignetteStrength);
+                 // Show the output
+                 cv::imshow("Webcam with Vignette", frame);
+        }
+        
         // Display the processed frame
         cv::imshow("Video", frame);
 
