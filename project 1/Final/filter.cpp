@@ -148,40 +148,40 @@ static int blurQuantize(cv::Mat& src, cv::Mat& dst) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  showFaces Function
+//  detectFaces Function
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int showFaces(cv::Mat& frame, cv::Mat& dst) {
-   //cv::Mat frame;
-   cv::Mat grey;
-   std::vector<cv::Rect> faces;
-   cv::Rect last(0, 0, 0, 0);
+// Function to detect faces
+int detectFaces(cv::Mat &grey, std::vector<cv::Rect> &faces) {
+        static cv::Mat half;
+        static cv::CascadeClassifier face_cascade;
+        static cv::String face_cascade_file(FACE_CASCADE_FILE);
 
-   // Loop forever
-   for (int f = 0;; f++) {
+        if (face_cascade.empty()) {
+            if (!face_cascade.load(face_cascade_file)) {
+                printf("Unable to load face cascade file\n");
+                printf("Terminating\n");
+                exit(-1);
+            }
+        }
 
-       //
+        faces.clear();
+        cv::resize(grey, half, cv::Size(grey.cols / 2, grey.rows / 2));
+        cv::equalizeHist(half, half);
+        face_cascade.detectMultiScale(half, faces);
+            /* std::cout <<"*****************inside df********" << std::endl;
+              print statements for debugging 
+           */
 
-       // convert the image to greyscale
-       cv::cvtColor(frame, grey, cv::COLOR_BGR2GRAY, 0);
+        for (int i = 0; i < faces.size(); i++) {
+            faces[i].x *= 2;
+            faces[i].y *= 2;
+            faces[i].width *= 2;
+            faces[i].height *= 2;
+        }
 
-       // detect faces
-       detectFaces(grey, faces);
-
-       // draw boxes around the faces
-       drawBoxes(frame, faces);
-
-       // add a little smoothing by averaging the last two detections
-       if (faces.size() > 0) {
-           last.x = (faces[0].x + last.x) / 2;
-           last.y = (faces[0].y + last.y) / 2;
-           last.width = (faces[0].width + last.width) / 2;
-           last.height = (faces[0].height + last.height) / 2;
-       }
-   }
-   return 0;
-}
-
+        return 0;
+}    
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  brightness_contrast Function
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
