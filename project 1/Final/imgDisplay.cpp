@@ -1,3 +1,13 @@
+/*
+  Saikiran Juttu & Suriya Kasiyalan Siva
+  Spring 2024
+  01/27/2024
+  CS 5330 Computer Vision
+
+  Functions for finding faces and drawing boxes around them
+
+  The path to the Haar cascade file is define in faceDetect.h
+*/
 #include <iostream>
 #include <opencv2/opencv.hpp>
 
