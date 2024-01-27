@@ -1,8 +1,8 @@
 /*
-  Bruce A. Maxwell
+  Saikiran Juttu & Suriya Kasiyalan Siva
   Spring 2024
+  01/27/2024
   CS 5330 Computer Vision
-
   Include file for faceDetect.cpp, face detection and drawing functions
 */
 #ifndef FACEDETECT_H
