@@ -18,4 +18,7 @@ static int blur5x5_2(cv::Mat& src, cv::Mat& dst);
 static int blurQuantize(cv::Mat& src, cv::Mat& dst);
 static int showFaces(cv::Mat& src, cv::Mat& dst);
 static int Brightness_contrast(cv::Mat& frame, cv::Mat& outputFrame);
+static int magnitude(cv::Mat& sx, cv::Mat& sy, cv::Mat& dst);
+static int sobelX3x3(cv::Mat& src, cv::Mat& dst);
+static int sobelY3x3(cv::Mat& src, cv::Mat& dst);
 #endif // FILTER_H
