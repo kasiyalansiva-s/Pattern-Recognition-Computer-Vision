@@ -1,3 +1,9 @@
+/*
+  Saikiran Juttu & Suriya Kasiyalan Siva
+  Spring 2024
+  01/27/2024
+  CS 5330 Computer Vision
+*/
 #ifndef FILTER_H
 #define FILTER_H
 
