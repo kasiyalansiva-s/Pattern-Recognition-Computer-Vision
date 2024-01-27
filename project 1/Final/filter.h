@@ -49,5 +49,8 @@ static int sobelY3x3(cv::Mat& src, cv::Mat& dst);
 // Function to apply a Sobel Y 3x3 filter to an image.
 static void strongColor(cv::Mat& frame, int hueValue, int hueRange);
 
+// Function to apply a vignette effect to an image.
+static void applyVignette(cv::Mat& src, double vignetteStrength)
+
 #endif // FILTER_H
 
