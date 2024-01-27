@@ -1,3 +1,11 @@
+/*
+  Saikiran Juttu & 
+  Spring 2024
+  01/27/2024
+  CS 5330 Computer Vision
+
+  Simple example of face detection using a Haar cascade
+*/
 #include <opencv2/opencv.hpp>
 #include "filter.h"
 #include "filter.cpp"
