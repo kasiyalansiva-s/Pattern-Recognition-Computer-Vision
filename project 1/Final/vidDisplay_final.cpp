@@ -75,6 +75,33 @@ int main(int argc, char* argv[]) {
             // Apply brightness and contrast adjustment
             showFaces(frame, frame);
         }
+        if (lastKey == 'x') {
+            cv::Mat sobelXImage, displayXImage;
+
+            sobelX3x3(frame, sobelXImage);
+
+            cv::convertScaleAbs(sobelXImage, displayXImage);
+            cv::imshow("Video1", displayXImage);
+
+            cv::imwrite("Video1.jpg", displayXImage);
+
+
+        }
+        if (lastKey == 'y') {
+            cv::Mat sobelYImage, displayYImage;
+            sobelY3x3(frame, sobelYImage);
+            cv::convertScaleAbs(sobelYImage, displayYImage);
+            cv::imshow("Video2", displayYImage);
+
+            cv::imwrite("Video2.jpg", displayYImage);
+        }
+        if (lastKey == 'm') {
+            cv::Mat sobelXImage, sobelYImage, magnitudeImage;
+            sobelX3x3(frame, sobelXImage);
+            sobelY3x3(frame, sobelYImage);
+            magnitude(sobelXImage, sobelYImage, magnitudeImage);
+            cv::imwrite("Video3.jpg", magnitudeImage);
+        }
         // Display the processed frame
         cv::imshow("Video", frame);
 
@@ -85,7 +112,7 @@ int main(int argc, char* argv[]) {
         if (key == 'q') {
             // Exit the program if 'q' is pressed
             break;
-        } else if (key == 'g' || key == 'c' || key == 'h' || key == 't' || key == 'b' || key == 'i' || key == 's' || key == 'a') {
+        } else if (key == 'g' || key == 'c' || key == 'h' || key == 't' || key == 'b' || key == 'i' || key == 's' || key == 'a'|| key == 'x' || key == 'y' || key == 'm') {
             // Update lastKey based on user input
             lastKey = key;
         }
