@@ -79,7 +79,10 @@ int main(int argc, char* argv[]) {
             cv::Mat sobelXImage, displayXImage;
 
             sobelX3x3(frame, sobelXImage);
-
+            // Convert the result of the Sobel X operation (sobelXImage) to absolute values
+            // and store the result in displayXImage. This step is often necessary when working
+            // with gradient images to ensure that negative values are represented as positive
+            // values, making the image suitable for display and visualization.
             cv::convertScaleAbs(sobelXImage, displayXImage);
             cv::imshow("Video1", displayXImage);
 
@@ -90,18 +93,34 @@ int main(int argc, char* argv[]) {
         if (lastKey == 'y') {
             cv::Mat sobelYImage, displayYImage;
             sobelY3x3(frame, sobelYImage);
+            // Convert the result of the Sobel Y operation (sobelXImage) to absolute values
+            // and store the result in displayYImage. This step is often necessary when working
+            // with gradient images to ensure that negative values are represented as positive
+            // values, making the image suitable for display and visualization.
             cv::convertScaleAbs(sobelYImage, displayYImage);
             cv::imshow("Video2", displayYImage);
 
             cv::imwrite("Video2.jpg", displayYImage);
         }
+        // If the last key pressed is 'm', perform the following image processing steps:
         if (lastKey == 'm') {
+        // Initialize matrices to store Sobel X, Sobel Y, and magnitude images.
             cv::Mat sobelXImage, sobelYImage, magnitudeImage;
+
+            // Apply Sobel X and Sobel Y operations to the input frame to compute gradients.
             sobelX3x3(frame, sobelXImage);
             sobelY3x3(frame, sobelYImage);
+
+            // Calculate the magnitude of the gradients using the Sobel X and Sobel Y results.
             magnitude(sobelXImage, sobelYImage, magnitudeImage);
+
+            // Convert the magnitude image to absolute values and scale it for display.
+            cv::convertScaleAbs(magnitudeImage, magnitudeImage);
+
+            // Save the processed magnitude image to a file named "Video3.jpg".
             cv::imwrite("Video3.jpg", magnitudeImage);
-        }
+}
+
         // Display the processed frame
         cv::imshow("Video", frame);
 
