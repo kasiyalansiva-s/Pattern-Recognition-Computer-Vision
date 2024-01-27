@@ -4,22 +4,27 @@
   01/27/2024
   CS 5330 Computer Vision
 */
-#include <cstdio>                    // this is to call all the C++ input output libraries
+#include <cstdio>                    // This is to include C++ input-output libraries
 #include <iostream>
-#include <opencv2/opencv.hpp> // This header covers all the opencv functions 
+#include <opencv2/opencv.hpp>        // This header covers all the OpenCV functions 
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/highgui.hpp"
 using namespace cv;
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  Customgreyscale Function
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+// Function to convert a 3-channel image to custom grayscale
 static int Customgreyscale(cv::Mat& src, cv::Mat& dst) {
     CV_Assert(src.type() == CV_8UC3); // Ensure input is a 3-channel image
-
+    // Create a destination matrix with the same size and type as the source
     dst.create(src.size(), src.type());
-
+    // Loop through each row of the source matrix
     for (int i = 0; i < src.rows; ++i) {
+        // Loop through each column of the source matrix
         for (int j = 0; j < src.cols; ++j) {
+            // Get the pixel value at (i, j) in the source matrix
             cv::Vec3b pixel = src.at<cv::Vec3b>(i, j);
             dst.at<cv::Vec3b>(i, j) = cv::Vec3b(255 - pixel[2], 255 - pixel[2], 255 - pixel[2]);
         }
@@ -27,6 +32,11 @@ static int Customgreyscale(cv::Mat& src, cv::Mat& dst) {
 
     return 0; // Return 0 on success
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  applySepiaTone Function
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // Function to apply Sepia tone filter to a pixel
 static int applySepiaTone(cv::Mat& src, cv::Mat& dst) {
     CV_Assert(src.type() == CV_8UC3); // Ensure input is a 3-channel image
@@ -58,6 +68,10 @@ static int applySepiaTone(cv::Mat& src, cv::Mat& dst) {
     return 0;
 
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  blur5x5_2 Function
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static int blur5x5_2(cv::Mat& src, cv::Mat& dst) {
     // Copy the source image to the destination image
@@ -102,6 +116,11 @@ static int blur5x5_2(cv::Mat& src, cv::Mat& dst) {
 
     return 0;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  blurQuantize Function
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static int blurQuantize(cv::Mat& src, cv::Mat& dst) {
     // Apply Gaussian blur to the input image
     cv::Mat blurred;
@@ -127,36 +146,46 @@ static int blurQuantize(cv::Mat& src, cv::Mat& dst) {
 
     return 0;
 }
-//static int showFaces(cv::Mat& frame, cv::Mat& dst) {
-//    //cv::Mat frame;
-//    cv::Mat grey;
-//    std::vector<cv::Rect> faces;
-//    cv::Rect last(0, 0, 0, 0);
-//
-//    // Loop forever
-//    for (int f = 0;; f++) {
-//
-//        //
-//
-//        // convert the image to greyscale
-//        cv::cvtColor(frame, grey, cv::COLOR_BGR2GRAY, 0);
-//
-//        // detect faces
-//        detectFaces(grey, faces);
-//
-//        // draw boxes around the faces
-//        drawBoxes(frame, faces);
-//
-//        // add a little smoothing by averaging the last two detections
-//        if (faces.size() > 0) {
-//            last.x = (faces[0].x + last.x) / 2;
-//            last.y = (faces[0].y + last.y) / 2;
-//            last.width = (faces[0].width + last.width) / 2;
-//            last.height = (faces[0].height + last.height) / 2;
-//        }
-//    }
-//    return 0;
-//  }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  showFaces Function
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static int showFaces(cv::Mat& frame, cv::Mat& dst) {
+   //cv::Mat frame;
+   cv::Mat grey;
+   std::vector<cv::Rect> faces;
+   cv::Rect last(0, 0, 0, 0);
+
+   // Loop forever
+   for (int f = 0;; f++) {
+
+       //
+
+       // convert the image to greyscale
+       cv::cvtColor(frame, grey, cv::COLOR_BGR2GRAY, 0);
+
+       // detect faces
+       detectFaces(grey, faces);
+
+       // draw boxes around the faces
+       drawBoxes(frame, faces);
+
+       // add a little smoothing by averaging the last two detections
+       if (faces.size() > 0) {
+           last.x = (faces[0].x + last.x) / 2;
+           last.y = (faces[0].y + last.y) / 2;
+           last.width = (faces[0].width + last.width) / 2;
+           last.height = (faces[0].height + last.height) / 2;
+       }
+   }
+   return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  brightness_contrast Function
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static int brightness_contrast(cv::Mat& frame, cv::Mat& processedFrame) {
     using namespace cv;
     using namespace std;
@@ -173,7 +202,6 @@ static int brightness_contrast(cv::Mat& frame, cv::Mat& processedFrame) {
 
     createTrackbar("Brightness (Beta)", "Processed Frame", &beta_slider, 100);
 
-
     while (true) {
         alpha = static_cast<double>(alpha_slider) / 50.0;
 
@@ -187,6 +215,77 @@ static int brightness_contrast(cv::Mat& frame, cv::Mat& processedFrame) {
                 for (int c = 0; c < frame.channels(); c++) {
                     processedFrame.at<Vec3b>(y, x)[c] = saturate_cast<uchar>(alpha * frame.at<Vec3b>(y, x)[c] + beta);
                 }
+            }
+        }
+    }
+
+    return 0;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// SOBEL X FILTER
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Function to apply Sobel X filter to a 3-channel image
+static int sobelX3x3(cv::Mat& src, cv::Mat& dst) {
+    dst.create(src.size(), CV_16SC3);
+
+    for (int x = 1; x < src.rows - 1; ++x) {
+        for (int y = 1; y < src.cols - 1; ++y) {
+            for (int k = 0; k < 3; ++k) {
+                // Sobel X filter calculation
+                int gx = src.at<cv::Vec3b>(x - 1, y + 1)[k] - src.at<cv::Vec3b>(x - 1, y - 1)[k]
+                    + 2 * (src.at<cv::Vec3b>(x, y + 1)[k] - src.at<cv::Vec3b>(x, y - 1)[k])
+                    + src.at<cv::Vec3b>(x + 1, y + 1)[k] - src.at<cv::Vec3b>(x + 1, y - 1)[k];
+                dst.at<cv::Vec3s>(x, y)[k] = static_cast<short>(gx);
+            }
+        }
+    }
+
+    return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// SOBEL Y FILTER
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Function to apply Sobel Y filter to a 3-channel image
+static int sobelY3x3(cv::Mat& src, cv::Mat& dst) {
+    dst.create(src.size(), CV_16SC3);
+
+    for (int x = 1; x < src.rows - 1; ++x) {
+        for (int y = 1; y < src.cols - 1; ++y) {
+            for (int k = 0; k < 3; ++k) {
+                // Sobel Y filter calculation
+                int gy = src.at<cv::Vec3b>(x + 1, y - 1)[k] - src.at<cv::Vec3b>(x - 1, y - 1)[k]
+                    + 2 * (src.at<cv::Vec3b>(x + 1, y)[k] - src.at<cv::Vec3b>(x - 1, y)[k])
+                    + src.at<cv::Vec3b>(x + 1, y + 1)[k] - src.at<cv::Vec3b>(x - 1, y + 1)[k];
+                dst.at<cv::Vec3s>(x, y)[k] = static_cast<short>(gy);
+            }
+        }
+    }
+
+    return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// GRADIENT MAGNITUDE FILTER
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Function to calculate the gradient magnitude of two images
+static int magnitude(cv::Mat& sx, cv::Mat& sy, cv::Mat& dst) {
+    if (sx.size() != sy.size()) {
+        std::cerr << "Error: Input images must have the same size." << std::endl;
+        return -1;
+    }
+
+    dst = cv::Mat(sx.size(), CV_8UC3);
+
+    for (int y = 0; y < sx.rows; ++y) {
+        for (int x = 0; x < sx.cols; ++x) {
+            for (int k = 0; k < 3; ++k) {
+                // Calculate the gradient magnitude
+                double mag = cv::norm(cv::Vec2d(sx.at<cv::Vec3s>(y, x)[k], sy.at<cv::Vec3s>(y, x)[k]));
+                dst.at<cv::Vec3b>(y, x)[k] = static_cast<uchar>(cv::saturate_cast<uchar>(mag));
             }
         }
     }
