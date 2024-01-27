@@ -71,9 +71,11 @@ int main(int argc, char* argv[]) {
             // Apply brightness and contrast adjustment
             brightness_contrast(frame, frame);
         }
-        if (lastKey == 'f') {
-            // Apply brightness and contrast adjustment
-            showFaces(frame, frame);
+        else if (lastKey == 'f') {
+            // Apply face detection filter when 'f' is pressed
+            filter::applyFaceDetection(frame);
+            cv::imshow("Video", frame);
+        
         }
         if (lastKey == 'x') {
             cv::Mat sobelXImage, displayXImage;
@@ -119,8 +121,12 @@ int main(int argc, char* argv[]) {
 
             // Save the processed magnitude image to a file named "Video3.jpg".
             cv::imwrite("Video3.jpg", magnitudeImage);
-}
-
+        }
+        else if (lastKey == 'w') {
+        // Call the isolateColor function with the desired hue value and range
+        filter::strongColor(frame, 60, 10); // Example for green color
+        cv::imshow("Video", frame);
+        }
         // Display the processed frame
         cv::imshow("Video", frame);
 
