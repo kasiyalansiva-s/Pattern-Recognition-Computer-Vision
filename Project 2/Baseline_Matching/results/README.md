@@ -18,17 +18,20 @@ This project implements a basic image-matching pipeline designed to match images
 
 ### Top 5 Matched Images
 1. ![Screenshot 2024-02-05 221242](https://github.com/kasiyalansiva-s/Pattern-Recognition-Computer-Vision/assets/156709412/f24c5256-c765-4bf8-98c2-7d36263a3fe4)
-2. ![Matched Image 2](path/to/matched/image_2.png)
-3. ![Matched Image 3](path/to/matched/image_3.png)
-4. ![Matched Image 4](path/to/matched/image_4.png)
-5. ![Matched Image 5](path/to/matched/image_5.png)
+2. ![Screenshot 2024-02-05 221255](https://github.com/kasiyalansiva-s/Pattern-Recognition-Computer-Vision/assets/156709412/5c67dbc6-92dc-489a-a08d-4a93b76c07bc)
+3. ![Screenshot 2024-02-05 221303](https://github.com/kasiyalansiva-s/Pattern-Recognition-Computer-Vision/assets/156709412/f4b64099-8bd5-4dd0-bcb1-746ab0aafc33)
+4. ![Screenshot 2024-02-05 221314](https://github.com/kasiyalansiva-s/Pattern-Recognition-Computer-Vision/assets/156709412/131b8dff-e1c5-4e78-ba73-a91dc8308a28)
+5. ![Screenshot 2024-02-05 221326](https://github.com/kasiyalansiva-s/Pattern-Recognition-Computer-Vision/assets/156709412/87bd2760-c8aa-43c0-990b-b71c92cee771)
 
-### Match Scores
-1. Matched Image 1: 0.123
-2. Matched Image 2: 0.178
-3. Matched Image 3: 0.201
-4. Matched Image 4: 0.215
-5. Matched Image 5: 0.231
+### Match Distance Scores
+1. Matched Image 1 Distance: 0
+2. Matched Image 2 Distance: 8199
+3. Matched Image 3 Distance: 8388
+4. Matched Image 4 Distance: 8411
+5. Matched Image 5 Distance: 8584
 
-Note: Lower scores indicate greater similarity to the target image.
+#### Terminal Image
+![Screenshot 2024-02-05 215106](https://github.com/kasiyalansiva-s/Pattern-Recognition-Computer-Vision/assets/156709412/a2e6e5f0-cee0-4a0c-8454-d53bdbb9db3c)
+
+### Note: Lower scores indicate greater similarity to the target image.
 
