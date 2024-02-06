@@ -14,7 +14,7 @@ This project implements a basic image-matching pipeline designed to match images
 
 ## Matching Results
 ### Target Image
-![Target Image](path/to/target/image.png)
+![Screenshot 2024-02-05 214800](https://github.com/kasiyalansiva-s/Pattern-Recognition-Computer-Vision/assets/156709412/8ee003b9-70f9-49ba-92c7-9c17114898c0)
 
 ### Top 5 Matched Images
 1. ![Matched Image 1](path/to/matched/image_1.png)
