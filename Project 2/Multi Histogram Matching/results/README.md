@@ -20,15 +20,15 @@ The top three matches for the target image pic.0274.jpg:
 
 ### 1. pic.0228.jpg
 ![pic 0228](https://github.com/kasiyalansiva-s/Pattern-Recognition-Computer-Vision/assets/156709412/08f6f931-5db1-47c6-bcac-490958ebfb25)
- 
+#### Distance: 0.000107 
   
 ### 2. pic.0511.jpg
 ![pic 0511](https://github.com/kasiyalansiva-s/Pattern-Recognition-Computer-Vision/assets/156709412/b8f8ace9-530e-4a50-ad36-a6344352f533) 
-  
+#### Distance: 0.000711  
  
 ### 3. pic.0558.jpg
 ![pic 0558](https://github.com/kasiyalansiva-s/Pattern-Recognition-Computer-Vision/assets/156709412/233606d2-1a29-4a74-ab9c-4411ece8e9b5) 
- 
+#### Distance: 0.011720
  
 ## Discussion
 The results demonstrate the effectiveness of using multi-histogram matching with distinct spatial representations to find similar images. By dividing the image into top and bottom halves, the algorithm can capture nuanced color variations across different regions. The choice of 8 bins for each RGB channel balances computational complexity and information richness. Additionally, histogram intersection provides a robust measure of similarity between histograms.
