@@ -5,46 +5,98 @@
   CS 5330 Computer Vision
 */
 
-#include <opencv2/opencv.hpp>
 #include <iostream>
 #include <vector>
-#include <algorithm>
+#include <string>
+#include <opencv2/opencv.hpp>
+#include <dirent.h>
 
-using namespace cv;
 using namespace std;
+using namespace cv;
 
-// Function to compute the sum-of-squared-difference between two matrices
-static double computeSSD(const Mat& mat1, const Mat& mat2) {
-    Mat diff;
-    absdiff(mat1, mat2, diff);
-    return sum(diff.mul(diff))[0];
+// Function to compute the sum of squared differences between two 7x7 squares
+double sumOfSquaredDifference(const Mat& square1, const Mat& square2) {
+    double ssd = 0.0;
+    for (int i = 0; i < square1.rows; ++i) {
+        for (int j = 0; j < square1.cols; ++j) {
+            for (int c = 0; c < square1.channels(); ++c) {
+                ssd += pow(square1.at<Vec3b>(i, j)[c] - square2.at<Vec3b>(i, j)[c], 2);
+            }
+        }
+    }
+    return ssd;
 }
 
-// Function to find the most similar images based on SSD
-static vector<pair<double, String>> findSimilarImages(const Mat& targetFeature, const vector<String>& imagePaths) {
-    vector<pair<double, String>> distances;
+// Function to compute features from a given image
+Mat computeFeatures(const Mat& image) {
+    // Assuming the 7x7 square is at the center
+    int startX = image.cols / 2 - 3;
+    int startY = image.rows / 2 - 3;
+    Rect roi(startX, startY, 7, 7);
 
-    for (const auto& imagePath : imagePaths) {
-        // Read the current image
-        Mat currentImage = imread(imagePath, IMREAD_GRAYSCALE);
+    // Extract 7x7 squares from each channel and concatenate
+    Mat features;
+    for (int c = 0; c < image.channels(); ++c) {
+        Mat channelSquare = image(roi).clone().reshape(0, 1);
+        features.push_back(channelSquare);
+    }
+    return features.reshape(0, 1);  // Flatten to a single row
+}
 
-        if (currentImage.empty()) {
-            cout << "Error reading image: " << imagePath << endl;
-            continue;
-        }
-
-        // Extract the central 7x7 square as the feature vector from the current image
-        Mat currentFeature = currentImage(Rect(currentImage.cols / 2 - 3, currentImage.rows / 2 - 3, 7, 7)).clone();
-
-        // Compute the sum-of-squared-difference between targetFeature and currentFeature
-        double distance = computeSSD(targetFeature, currentFeature);
-
-        // Store the distance and image path in the distances vector
-        distances.push_back({ distance, imagePath });
+int main() {
+    // Read target image
+    Mat targetImage = imread("/media/sakiran/Internal/2nd Semester/PRCV/Project/custom/olympus/pic.1016.jpg");
+    if (targetImage.empty()) {
+        cerr << "Error: Could not read target image." << endl;
+        return 1;
     }
 
-    // Sort the distances vector based on the first element of the pairs (distance)
-    sort(distances.begin(), distances.end());
+    // Compute features of target image
+    Mat targetFeatures = computeFeatures(targetImage);
 
-    return distances;
+    // Loop over the directory of images
+    string directoryPath = "/media/sakiran/Internal/2nd Semester/PRCV/Project/custom/olympus";
+    vector<pair<double, string>> similarityScores;
+
+    // Open the directory
+    DIR *dir;
+    struct dirent *ent;
+    if ((dir = opendir(directoryPath.c_str())) != nullptr) {
+        // Iterate over files in the directory
+        while ((ent = readdir(dir)) != nullptr) {
+            string filename = ent->d_name;
+            if (filename == "." || filename == "..") {
+                continue; // Skip current and parent directories
+            }
+            // Read image
+            string imagePath = directoryPath + "/" + filename;
+            Mat image = imread(imagePath);
+            if (image.empty()) {
+                cerr << "Error: Could not read image " << filename << endl;
+                continue;
+            }
+            // Compute features of current image
+            Mat imageFeatures = computeFeatures(image);
+            // Compute similarity score
+            double distance = sumOfSquaredDifference(targetFeatures, imageFeatures);
+            // Store similarity score and image path
+            similarityScores.push_back(make_pair(distance, imagePath));
+        }
+        closedir(dir);
+    } else {
+        cerr << "Error: Could not open directory." << endl;
+        return 1;
+    }
+
+    // Sort the list of matches
+    sort(similarityScores.begin(), similarityScores.end());
+
+    // Return top N matches (here, N = 5)
+    int topN = 5;
+    cout << "Top " << topN << " similar images:" << endl;
+    for (int i = 0; i < min(topN, static_cast<int>(similarityScores.size())); ++i) {
+        cout << similarityScores[i].second << " - Distance: " << similarityScores[i].first << endl;
+    }
+
+    return 0;
 }
