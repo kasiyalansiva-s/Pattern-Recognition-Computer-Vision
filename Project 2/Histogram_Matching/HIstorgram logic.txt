@@ -1,0 +1,42 @@
+Function to compute custom color histogram using pixel-wise method in HSV color space
+std::vector<float> computeCustomColorHistogram(const cv::Mat& image, int numBinsPerChannel) {
+    std::vector<float> histogram(numBinsPerChannel * numBinsPerChannel * numBinsPerChannel, 0.0f);
+
+    // Convert image to the HSV color space
+    cv::Mat hsvImage;
+    cv::cvtColor(image, hsvImage, cv::COLOR_BGR2HSV);
+
+    // Split HSV image into individual channels
+    std::vector<cv::Mat> hsvChannels;
+    cv::split(hsvImage, hsvChannels);
+
+    // Compute histogram
+    int numRows = image.rows;
+    int numCols = image.cols;
+
+    for (int i = 0; i < numRows; ++i) {
+        for (int j = 0; j < numCols; ++j) {
+            // Get pixel values from HSV channels
+            int h = hsvChannels[0].at<uchar>(i, j); // Hue channel
+            int s = hsvChannels[1].at<uchar>(i, j); // Saturation channel
+            int v = hsvChannels[2].at<uchar>(i, j); // Value channel
+
+            // Normalize pixel values to [0, numBinsPerChannel - 1]
+            int hBin = std::min(h * numBinsPerChannel / 180, numBinsPerChannel - 1); // Hue values range from 0 to 179
+            int sBin = std::min(s * numBinsPerChannel / 256, numBinsPerChannel - 1); // Saturation values range from 0 to 255
+            int vBin = std::min(v * numBinsPerChannel / 256, numBinsPerChannel - 1); // Value values range from 0 to 255
+
+            // Update histogram bin counts
+            int index = hBin * numBinsPerChannel * numBinsPerChannel + sBin * numBinsPerChannel + vBin;
+            histogram[index] += 1.0f;
+        }
+    }
+
+    // Normalize histogram
+    float totalPixels = numRows * numCols;
+    for (float& binCount : histogram) {
+        binCount /= totalPixels;
+    }
+
+    return histogram;
+}
