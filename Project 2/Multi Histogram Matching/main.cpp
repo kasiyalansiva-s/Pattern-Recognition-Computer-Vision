@@ -1,10 +1,3 @@
-/*
-  Suriya Kasiyalan Siva & Saikiran Juttu
-  Spring 2024
-  02/06/2024
-  CS 5330 Computer Vision
-*/
-
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <vector>
@@ -12,11 +5,7 @@
 #include <string>
 #include <dirent.h>
 
-/*
-  
-  Function to compute RGB histogram given the image
-
-*/
+// Function to compute RGB histogram given the image
 cv::Mat RGBHist(const cv::Mat& image, int numBins) {
     cv::Mat hist = cv::Mat::zeros(numBins * 3, numBins, CV_32F); // Create histogram for each channel
 
@@ -40,11 +29,7 @@ cv::Mat RGBHist(const cv::Mat& image, int numBins) {
     return hist;
 }
 
-/*
-  
-  Function to compute intersection histogram distance given histograms of two images
-
-*/
+// Function to compute intersection histogram distance given histograms of two images
 double histIntersectionDist(const cv::Mat& hist1, const cv::Mat& hist2) {
     double intersection = 0.0;
     for (int i = 0; i < hist1.rows; ++i) {
@@ -55,11 +40,7 @@ double histIntersectionDist(const cv::Mat& hist1, const cv::Mat& hist2) {
     return intersection;
 }
 
-/*
-  
-  Function to compute top and bottom half histograms given an image and the number of bins
-
-*/
+// Function to compute top and bottom half histograms given an image and the number of bins
 std::pair<cv::Mat, cv::Mat> topBottomHist(const cv::Mat& image, int numBins) {
     cv::Mat topHalf = image.rowRange(0, image.rows / 2);
     cv::Mat bottomHalf = image.rowRange(image.rows / 2, image.rows);
@@ -70,12 +51,8 @@ std::pair<cv::Mat, cv::Mat> topBottomHist(const cv::Mat& image, int numBins) {
     return std::make_pair(topHist, bottomHist);
 }
 
-/*
-  
-  Function to compute histograms for a target image and loop through an image database.
-  Sorts the images in ascending order based on the histogram intersection distance.
-
-*/
+// Function to compute histograms for a target image and loop through an image database.
+// Sorts the images in ascending order based on the histogram intersection distance.
 std::vector<std::pair<std::string, double>> compHist(const std::string& targetImagePath, const std::string& directoryPath, int numBins) {
     std::vector<std::pair<std::string, double>> distances; // Store image name and distance
 
