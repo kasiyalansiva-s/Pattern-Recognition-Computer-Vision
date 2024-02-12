@@ -1,5 +1,9 @@
-
-
+/*
+  Suriya Kasiyalan Siva & Saikiran Juttu
+  Spring 2024
+  02/11/2024
+  CS 5330 Computer Vision
+*/
 
 #include <iostream>
 #include <vector>
