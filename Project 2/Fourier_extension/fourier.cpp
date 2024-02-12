@@ -1,9 +1,16 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <opencv2/opencv.hpp>
-#include <dirent.h>
-#include <cmath> // for logarithm function
+/*
+  Suriya Kasiyalan Siva & Saikiran Juttu
+  Spring 2024
+  02/11/2024
+  CS 5330 Computer Vision
+*/
+
+#include <iostream> // Input/output stream
+#include <vector> // Vector container
+#include <string> // String handling
+#include <opencv2/opencv.hpp> // OpenCV library
+#include <dirent.h> // Directory handling
+#include <cmath> // Math functions, used for logarithm
 
 using namespace std;
 using namespace cv;
