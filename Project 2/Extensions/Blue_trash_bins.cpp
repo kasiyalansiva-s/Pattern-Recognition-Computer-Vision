@@ -1,3 +1,11 @@
+/*
+  Suriya Kasiyalan Siva & Saikiran Juttu
+  Spring 2024
+  02/11/2024
+  CS 5330 Computer Vision
+*/
+
+// Including necessary libraries
 #include <iostream>
 #include <vector>
 #include <string>
@@ -7,13 +15,17 @@
 using namespace std;
 using namespace cv;
 
+// Function to detect blue regions in an image
 Mat detectBlueRegions(const Mat& image) {
+    // Convert image to HSV color space
     Mat hsvImage;
     cvtColor(image, hsvImage, COLOR_BGR2HSV);
 
+    // Define lower and upper bounds for blue color in HSV
     Scalar lowerBound = Scalar(100, 50, 50); // Adjust as needed
     Scalar upperBound = Scalar(140, 255, 255); // Adjust as needed
 
+    // Create mask to identify blue regions
     Mat mask;
     inRange(hsvImage, lowerBound, upperBound, mask);
 
@@ -21,24 +33,29 @@ Mat detectBlueRegions(const Mat& image) {
 }
 
 int main() {
-     // Load the target image
+    // Load the target image
     string targetImagePath = "/media/sakiran/Internal/2nd Semester/PRCV/Project/shape/olympus/pic.0287.jpg";
 
+    // Define minimum and maximum area for detected blue regions
     double minArea = 10000; // Adjust as needed
     double maxArea = 50000; // Adjust as needed
 
+    // Vector to store paths of images containing blue trash cans
     vector<string> blueBinImages;
 
+    // Read the target image
     Mat targetImage = imread(targetImagePath);
     if (targetImage.empty()) {
         cerr << "Error: Could not read target image." << endl;
         return 1;
     }
 
+    // Detect blue regions in the target image
     Mat targetBlueMask = detectBlueRegions(targetImage);
     vector<vector<Point>> targetContours;
     findContours(targetBlueMask, targetContours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE, Point(0, 0));
 
+    // Directory containing other images to compare with target image
     string directoryPath = "/media/sakiran/Internal/2nd Semester/PRCV/Project/shape/olympus";
 
     DIR *dir;
@@ -59,10 +76,11 @@ int main() {
             vector<vector<Point>> contours;
             findContours(blueMaskImage, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE, Point(0, 0));
 
+            // Compare blue regions in current image with target image
             for (const auto& contour : contours) {
                 double area = contourArea(contour);
                 if (area >= minArea && area <= maxArea) {
-                    // Compare the contours of the current image with the target image
+                    // Compare contours of the current image with the target image
                     for (const auto& targetContour : targetContours) {
                         double similarity = matchShapes(contour, targetContour, CONTOURS_MATCH_I1, 0);
                         
@@ -80,6 +98,7 @@ int main() {
         return 1;
     }
 
+    // Output paths of images containing blue trash cans similar to the target image
     cout << "Images with blue trash can bins similar to the target image:" << endl;
     for (const auto& imagePath : blueBinImages) {
         cout << imagePath << endl;
