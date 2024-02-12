@@ -8,8 +8,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <opencv2/opencv.hpp>
-#include <dirent.h>
+#include <opencv2/opencv.hpp> // OpenCV library
+#include <dirent.h> // Directory handling library
 
 using namespace std;
 using namespace cv;
@@ -20,6 +20,7 @@ double sumOfSquaredDifference(const Mat& square1, const Mat& square2) {
     for (int i = 0; i < square1.rows; ++i) {
         for (int j = 0; j < square1.cols; ++j) {
             for (int c = 0; c < square1.channels(); ++c) {
+                // Sum of squared differences for each pixel and channel
                 ssd += pow(square1.at<Vec3b>(i, j)[c] - square2.at<Vec3b>(i, j)[c], 2);
             }
         }
@@ -32,13 +33,13 @@ Mat computeFeatures(const Mat& image) {
     // Assuming the 7x7 square is at the center
     int startX = image.cols / 2 - 3;
     int startY = image.rows / 2 - 3;
-    Rect roi(startX, startY, 7, 7);
+    Rect roi(startX, startY, 7, 7); // Region of interest (7x7 square)
 
     // Extract 7x7 squares from each channel and concatenate
     Mat features;
     for (int c = 0; c < image.channels(); ++c) {
-        Mat channelSquare = image(roi).clone().reshape(0, 1);
-        features.push_back(channelSquare);
+        Mat channelSquare = image(roi).clone().reshape(0, 1); // Extract square from current channel
+        features.push_back(channelSquare); // Concatenate squares
     }
     return features.reshape(0, 1);  // Flatten to a single row
 }
@@ -56,7 +57,7 @@ int main() {
 
     // Loop over the directory of images
     string directoryPath = "/media/sakiran/Internal/2nd Semester/PRCV/Project/custom/olympus";
-    vector<pair<double, string>> similarityScores;
+    vector<pair<double, string>> similarityScores; // Stores similarity scores and image paths
 
     // Open the directory
     DIR *dir;
@@ -88,7 +89,7 @@ int main() {
         return 1;
     }
 
-    // Sort the list of matches
+    // Sort the list of matches based on similarity score
     sort(similarityScores.begin(), similarityScores.end());
 
     // Return top N matches (here, N = 5)
