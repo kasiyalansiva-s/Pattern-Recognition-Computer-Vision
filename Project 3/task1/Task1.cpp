@@ -1,4 +1,9 @@
-
+/*
+  Suriya Kasiyalan Siva
+  Spring 2024
+  02/18/2024
+  CS 5330 Computer Vision
+*/
 #include<iostream>
 #include<opencv2/opencv.hpp>
 
