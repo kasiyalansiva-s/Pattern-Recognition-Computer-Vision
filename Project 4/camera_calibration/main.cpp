@@ -34,6 +34,7 @@ int main() {
 
     int num_calibration_frames = 0;
     double total_reprojection_error = 0.0;
+    bool calibration_done = false;
 
     while (true) {
         cap >> frame; // Capture frame-by-frame
@@ -68,7 +69,7 @@ int main() {
 
             num_calibration_frames++;
             // Perform camera calibration if enough frames are collected
-            if (corner_list.size() >= 10) {
+            if (corner_list.size() >= 5 && !calibration_done) {
                 std::cout << "entering camera caliberation..." << std::endl;
                 cv::Mat cameraMatrix = cv::Mat::eye(3, 3, CV_64F);
                 cv::Mat distCoeffs = cv::Mat::zeros(8, 1, CV_64F);
@@ -83,46 +84,50 @@ int main() {
                 fs << "cameraMatrix" << cameraMatrix;
                 fs << "distortionCoefficients" << distCoeffs;
                 fs.release();
-                break;
+                calibration_done = true;
             }
         }
         cv::imshow("Frame", frame);
         char key = cv::waitKey(1);
-        if (key == 's') { // Save the corner locations and corresponding 3D world points
-            std::ofstream file("calibration_data.txt");
-            if (file.is_open()) {
-                for (size_t i = 0; i < corner_list.size(); ++i) {
-                    file << "Image " << i + 1 << ":\n";
-                    for (size_t j = 0; j < corner_list[i].size(); ++j) {
-                        file << "Corner " << j + 1 << ": (" << corner_list[i][j].x << ", " << corner_list[i][j].y << ")\n";
-                        file << "3D World Point " << j + 1 << ": (" << point_list[i][j][0] << ", " << point_list[i][j][1] << ", " << point_list[i][j][2] << ")\n";
+        /*std::cout << "Calibration done. Press 's' to save, 'q' to quit." << std::endl;*/
+        if (calibration_done) {
+                       
+            if (key == 's') { // Save the corner locations and corresponding 3D world points
+                std::ofstream file("calibration_data.txt");
+                if (file.is_open()) {
+                    for (size_t i = 0; i < corner_list.size(); ++i) {
+                        file << "Image " << i + 1 << ":\n";
+                        for (size_t j = 0; j < corner_list[i].size(); ++j) {
+                            file << "Corner " << j + 1 << ": (" << corner_list[i][j].x << ", " << corner_list[i][j].y << ")\n";
+                            file << "3D World Point " << j + 1 << ": (" << point_list[i][j][0] << ", " << point_list[i][j][1] << ", " << point_list[i][j][2] << ")\n";
+                        }
+                        file << "\n";
                     }
-                    file << "\n";
-                }
-                std::cout << "Calibration data saved to calibration_data.txt" << std::endl;
-                file.close();
-                // Create a directory for images if it doesn't exist
-                if (mkdir("calibration_images") != 0) {
-                    std::cerr << "Error: Unable to create directory" << std::endl;
+                    std::cout << "Calibration data saved to calibration_data.txt" << std::endl;
+                    file.close();
+                    // Create a directory for images if it doesn't exist
+                    if (mkdir("calibration_images") != 0) {
+                        std::cerr << "Error: Unable to create directory" << std::endl;
+                    }
+                    else {
+                        // Save images to the directory
+                        for (size_t i = 0; i < images.size(); ++i) {
+                            std::string filename = "calibration_images/calibration_image_" + std::to_string(i + 1) + ".jpg";
+                            cv::imwrite(filename, images[i]);
+                        }
+                        std::cout << "Calibration images saved to calibration_images directory" << std::endl;
+                    }
                 }
                 else {
-                    // Save images to the directory
-                    for (size_t i = 0; i < images.size(); ++i) {
-                        std::string filename = "calibration_images/calibration_image_" + std::to_string(i + 1) + ".jpg";
-                        cv::imwrite(filename, images[i]);
-                    }
-                    std::cout << "Calibration images saved to calibration_images directory" << std::endl;
+                    std::cerr << "Error: Unable to open calibration_data.txt for writing" << std::endl;
                 }
-            }
-            else {
-                std::cerr << "Error: Unable to open calibration_data.txt for writing" << std::endl;
-            }
 
+            }
+            else if (key == 'q') { // Break the loop if the 'q' key is pressed
+                break;
+            }
         }
-
-        else if (key == 'q') { // Break the loop if the 'q' key is pressed
-            break;
-        }
+        
     }
     cap.release(); // Release the video capture object
     cv::destroyAllWindows();
