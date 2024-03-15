@@ -1,1 +1,0 @@
-## In this i have detected the chessboard pattern and extracted the corners. Then stores those calibrated images along with the point_set and 3d world points. I am saving the images as well as the 3d world points.
