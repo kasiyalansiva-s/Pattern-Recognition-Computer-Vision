@@ -91,7 +91,7 @@ def test_network(model, device, test_loader):
     accuracy = 100. * correct / len(test_loader.dataset)
     return accuracy, test_loss
 
-def main():
+def main(argv):
     # here I am downloading the Train and Test MNIST datas from datasets module and then convert the images into Tensor (3D array)
     train_data = datasets.MNIST(
         root='data',
@@ -190,4 +190,4 @@ def main():
     torch.save(model.state_dict(), "mnist_model.pth")
     
 if __name__ == "__main__":
-    main()   
+    main(sys.argv)   
