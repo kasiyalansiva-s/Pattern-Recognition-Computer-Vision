@@ -72,7 +72,7 @@ def test_dataset(model, test_loader):
     return predictions, true_labels
    
    
-def main():
+def main(argv):
     # Load the trained model
     model = Mynetwork()
     model.load_state_dict(torch.load("mnist_model.pth"))
@@ -147,4 +147,4 @@ def main():
             plt.show()
             
 if __name__ == "__main__":
-    main()
+    main(sys.argv)
