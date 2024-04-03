@@ -143,7 +143,7 @@ def new_input_with_label_mapping(model, device, image_paths):
     letter_predictions = [class_mapping[pred] for pred in predictions]
     return letter_predictions
 
-def main():
+def main(argv):
     # Load Greek train dataset
     training_set_path = 'greek_train'
     # Load the pre-trained network created in previous task  
@@ -179,4 +179,4 @@ def main():
     plt.show()
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv)
