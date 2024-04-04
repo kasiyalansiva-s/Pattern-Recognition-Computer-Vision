@@ -17,4 +17,4 @@ https://drive.google.com/drive/folders/1YHpR2yw74ZA5m4vqnLdBafhIYs6xUxko?usp=sha
 * To acess this in extension task2.py file press 'g' to switch modes between Gabor filter in first layer and if pressed again it goes into use pre-trained networks available in the PyTorch package.
 * For (Build a live video digit recognition application using the trained network) is in a python file named extension task video.py
 
-#### I have used a two-time travel day to submit the project on 04/04/2024 by 11:59 pm.
+#### I have used a three-time travel day to submit the project on 04/04/2024 by 11:59 pm.
