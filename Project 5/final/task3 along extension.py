@@ -150,9 +150,18 @@ def main(argv):
     # Load the pre-trained network created in previous task  
     model = Mynetwork()
     model.load_state_dict(torch.load("mnist_model.pth"))
+    print(model)
+    input_tensor = torch.randn(1, 1, 28, 28)
+    # Pass the input tensor through the model to get the output tensor
+    output_tensor = model(input_tensor)
+    dot = make_dot(output_tensor, params=dict(model.named_parameters()))
+    dot.render("Mynetwork", format="png")
     for param in model.parameters():
         param.requires_grad = False
     model = replace_last_layer(model, num_classes=4)
+    output_tensor = model(input_tensor)
+    dot = make_dot(output_tensor, params=dict(model.named_parameters()))
+    dot.render("New_Mynetwork", format="png")
     device = torch.device("cpu")
     print("Using device:", device)
 
