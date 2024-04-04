@@ -11,6 +11,7 @@ https://drive.google.com/drive/folders/1YHpR2yw74ZA5m4vqnLdBafhIYs6xUxko?usp=sha
 * For the task 3 a separate file named "task3 along extension.py", with the greek dataset and wrote those greek letters in ipad, predict it.
 * For the task 4 a separate python file named "task4_main.py".
 ##### Extensions:
+* For (Evaluate more dimensions on task 4) have a separate python file named Extension_1.py.
 * For (Try more greek letters than alpha, beta, and gamma), I have emplemented in the task 3 code itself.
 * For (There are many pre-trained networks available in the PyTorch package. Try loading one and evaluate its first couple of convolutional layers as in task 2) and (Replace the first layer of the MNIST network with a filter bank of your choosing (e.g. Gabor filters) and retrain the rest of the network, holding the first layer constant. How does it do?) in a one sinle python file.
 * To acess this in extension task2.py file press 'g' to switch modes between Gabor filter in first layer and if pressed again it goes into use pre-trained networks available in the PyTorch package.
